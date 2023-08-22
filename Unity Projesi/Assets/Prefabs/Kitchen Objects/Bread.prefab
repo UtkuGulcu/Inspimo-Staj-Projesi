@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882c286d6382dda409af49ee8fb7ec06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KitchenObjectSO: {fileID: 11400000, guid: fdcbc7291c0d8ee40ac9d8033341d35b, type: 2}
 --- !u!1 &5669156851625324771
 GameObject:
   m_ObjectHideFlags: 0
