@@ -21,22 +21,24 @@ public class Plate : KitchenObject
         objectsInPlate = new List<KitchenObjectSO>();
     }
 
-    public void TryToAddToPlate(KitchenObjectSO kitchenObjectSO)
+    public bool TryToAddToPlate(KitchenObjectSO kitchenObjectSO)
     {
         if (!ValidObjects.Contains(kitchenObjectSO))
         {
-            return;
+            return false;
         }
 
         if (objectsInPlate.Contains(kitchenObjectSO))
         {
-            return;
+            return false;
         }
-        
+
         objectsInPlate.Add(kitchenObjectSO);
         OnObjectAdded?.Invoke(this, new OnObjectAddedEventArgs
         {
             addedObject = kitchenObjectSO
         });
+
+        return true;
     }
 }

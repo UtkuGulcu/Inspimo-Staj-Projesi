@@ -39,7 +39,11 @@ public class IngredientCounter : Counter
         }
         else if (Player.Instance.GetKitchenObject().TryGetComponent(out Plate plate))
         {
-            plate.TryToAddToPlate(kitchenObjectSO);
+            if (plate.TryToAddToPlate(kitchenObjectSO))
+            {
+                stockCount--;
+                OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }

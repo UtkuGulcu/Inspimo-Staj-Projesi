@@ -10,7 +10,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     [SerializeField] private Transform pickupPoint;
 
     private KitchenObject kitchenObject;
-    
+
     private void Awake()
     {
         #region Singleton

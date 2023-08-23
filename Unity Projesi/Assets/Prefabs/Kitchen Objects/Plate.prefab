@@ -697,6 +697,8 @@ MonoBehaviour:
   KitchenObjectSO: {fileID: 11400000, guid: 78eea767e74e78f4095db611569d9259, type: 2}
   ValidObjects:
   - {fileID: 11400000, guid: fdcbc7291c0d8ee40ac9d8033341d35b, type: 2}
+  - {fileID: 11400000, guid: a82bb4f7d0290584eac20c3e2705f918, type: 2}
+  - {fileID: 11400000, guid: 7fa507454757fde468a0561cfc10ac84, type: 2}
 --- !u!1 &2661102039117682296
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,6 +918,10 @@ MonoBehaviour:
   validIngredientsInPlateList:
   - gameObject: {fileID: 1124041825372312965}
     KitchenObjectSo: {fileID: 11400000, guid: fdcbc7291c0d8ee40ac9d8033341d35b, type: 2}
+  - gameObject: {fileID: 1124041824543268171}
+    KitchenObjectSo: {fileID: 11400000, guid: a82bb4f7d0290584eac20c3e2705f918, type: 2}
+  - gameObject: {fileID: 919318950754280215}
+    KitchenObjectSo: {fileID: 11400000, guid: 7fa507454757fde468a0561cfc10ac84, type: 2}
 --- !u!1 &5029040990503011137
 GameObject:
   m_ObjectHideFlags: 0

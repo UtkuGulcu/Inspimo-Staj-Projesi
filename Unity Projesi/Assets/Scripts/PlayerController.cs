@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private float verticalInput;
     private Vector3 movementVector;
     private Rigidbody rb;
+    private bool isWalking;
 
     private void Awake()
     {
@@ -25,18 +26,23 @@ public class PlayerController : MonoBehaviour
         verticalInput = FixedJoystick.Instance.Vertical;
         movementVector = new Vector3(horizontalInput, 0, verticalInput);
         movementVector.Normalize();
+        isWalking = false;
         
         if (verticalInput != 0 && horizontalInput != 0)
         {
             Quaternion toRotation = Quaternion.LookRotation(movementVector, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+            isWalking = true;
         }
-
-        
     }
 
     private void FixedUpdate()
     {
         rb.velocity = movementVector * (movementSpeed * Time.deltaTime);
+    }
+
+    public bool IsWalking()
+    {
+        return isWalking;
     }
 }

@@ -40,4 +40,9 @@ public class KitchenObject : MonoBehaviour
         kitchenObjectParent.ClearKitchenObject();
         Destroy(gameObject);
     }
+
+    public void SetParentNull()
+    {
+        kitchenObjectParent = null;
+    }
 }

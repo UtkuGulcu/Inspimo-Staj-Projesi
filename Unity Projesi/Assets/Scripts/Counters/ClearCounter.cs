@@ -19,6 +19,28 @@ public class ClearCounter : Counter
             {
                 GetKitchenObject().SetKitchenObjectParent(Player.Instance);
             }
+            else if (Player.Instance.GetKitchenObject().TryGetComponent(out Plate playerPlate))
+            {
+                if (playerPlate.TryToAddToPlate(GetKitchenObject().GetKitchenObjectSO()))
+                {
+                    GetKitchenObject().DestroySelf();
+                }
+            }
+            else if (GetKitchenObject().TryGetComponent(out Plate counterPlate))
+            {
+                if (counterPlate.TryToAddToPlate(Player.Instance.GetKitchenObject().GetKitchenObjectSO()))
+                {
+                    Player.Instance.GetKitchenObject().DestroySelf();
+                    GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+                }
+            }
+            else
+            {
+                KitchenObject oldKitchenObject = Player.Instance.GetKitchenObject();
+                oldKitchenObject.SetParentNull();
+                GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+                oldKitchenObject.SetKitchenObjectParent(this);
+            }
         }
     }
 }
