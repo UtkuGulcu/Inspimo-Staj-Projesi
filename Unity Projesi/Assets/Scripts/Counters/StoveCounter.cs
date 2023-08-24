@@ -120,6 +120,7 @@ public class StoveCounter : Counter, IHasProgress
             timer = 0f;
             GetKitchenObject().SetKitchenObjectParent(Player.Instance);
             ChangeState(State.Idle);
+            InvokeProgressChangedEvent(0f);
         }
         else if (HasRecipeWithInput(kitchenObjectPlayer.GetKitchenObjectSO()))
         {
@@ -128,6 +129,7 @@ public class StoveCounter : Counter, IHasProgress
             kitchenObjectPlayer.SetKitchenObjectParent(this);
             timer = 0f;
             ChangeState(State.Idle);
+            InvokeProgressChangedEvent(0f);
         }
     }
 
@@ -146,6 +148,7 @@ public class StoveCounter : Counter, IHasProgress
             {
                 GetKitchenObject().DestroySelf();
                 ChangeState(State.Idle);
+                InvokeProgressChangedEvent(0f);
             }
         }
     }
@@ -191,11 +194,11 @@ public class StoveCounter : Counter, IHasProgress
         });
     }
 
-    private void InvokeProgressChangedEvent(float newProgress)
+    private void InvokeProgressChangedEvent(float newProgressNormalized)
     {
         OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
         {
-            progressNormalized = newProgress
+            progressNormalized = newProgressNormalized
         });
     }
 }

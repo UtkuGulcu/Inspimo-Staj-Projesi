@@ -8,6 +8,7 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerInteraction : MonoBehaviour
 {
+    [SerializeField] private Transform interactionOrigin;
     [SerializeField] [Range(0, 3)] private float interactionDistance;
     [SerializeField] private LayerMask interactionLayer;
     private GameObject lastInteractedObject;
@@ -27,7 +28,7 @@ public class PlayerInteraction : MonoBehaviour
     private void Update()
     {
         // If this ray hits an interactable object
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, interactionDistance, interactionLayer))
+        if (Physics.Raycast(interactionOrigin.position, transform.forward, out RaycastHit hit, interactionDistance))
         {
             // If this is the first frame of the hit
             if (hit.transform.TryGetComponent(out IInteractable InteractableOnRange) && lastInteractedObject == null)
@@ -46,7 +47,7 @@ public class PlayerInteraction : MonoBehaviour
     
     private void UIManager_OnAlternateInteractButtonDown(object sender, EventArgs e)
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, interactionDistance, interactionLayer))
+        if (Physics.Raycast(interactionOrigin.position, transform.forward, out RaycastHit hit, interactionDistance, interactionLayer))
         {
             if (hit.transform.TryGetComponent(out IAlternateInteractable AlternateInteractable))
             {
@@ -57,7 +58,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void UIManager_OnInteractButtonDown(object sender, EventArgs e)
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, interactionDistance, interactionLayer))
+        if (Physics.Raycast(interactionOrigin.position, transform.forward, out RaycastHit hit, interactionDistance, interactionLayer))
         {
             if (hit.transform.TryGetComponent(out IInteractable Interactable))
             {
