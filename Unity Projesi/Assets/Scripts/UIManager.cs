@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+
         #region Singleton
 
         if (Instance == null)

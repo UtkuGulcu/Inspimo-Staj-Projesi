@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TrashCounter : Counter
 {
-    public override void Interact()
+    public override void Interact(Player interactedPlayer)
     {
-        if (Player.Instance.HasKitchenObject())
+        if (interactedPlayer.HasKitchenObject())
         {
-            Player.Instance.GetKitchenObject().DestroySelf();
+            interactedPlayer.GetKitchenObject().DestroySelf();
         }
     }
 }

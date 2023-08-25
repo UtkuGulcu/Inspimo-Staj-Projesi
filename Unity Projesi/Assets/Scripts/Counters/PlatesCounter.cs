@@ -14,18 +14,18 @@ public class PlatesCounter : Counter
         kitchenObjectPlate = GetKitchenObject();
     }
 
-    public override void Interact()
+    public override void Interact(Player interactedPlayer)
     {
-        KitchenObject kitchenObjectPlayer = Player.Instance.GetKitchenObject();
+        KitchenObject kitchenObjectPlayer = interactedPlayer.GetKitchenObject();
         
         if (kitchenObjectPlayer == null)
         {
-            KitchenObject.SpawnKitchenObject(kitchenObjectSO, Player.Instance);
+            KitchenObject.SpawnKitchenObject(kitchenObjectSO, interactedPlayer);
         }
         else if (kitchenObjectPlate.GetComponent<Plate>().TryToAddToPlate(kitchenObjectPlayer.GetKitchenObjectSO()))
         {
             kitchenObjectPlayer.DestroySelf();
-            kitchenObjectPlate.SetKitchenObjectParent(Player.Instance);
+            kitchenObjectPlate.SetKitchenObjectParent(interactedPlayer);
             KitchenObject.SpawnKitchenObject(kitchenObjectSO, this);
             kitchenObjectPlate = GetKitchenObject();
         }

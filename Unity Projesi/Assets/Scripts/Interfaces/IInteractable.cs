@@ -6,5 +6,5 @@ public interface IInteractable
 {
     public void StartInteracting();
     public void StopInteracting();
-    public void Interact();
+    public void Interact(Player interactedPlayer);
 }

@@ -5,26 +5,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent
 {
-    public static Player Instance { get; private set; }
+    //public static Player Instance { get; private set; }
 
     [SerializeField] private Transform pickupPoint;
 
     private KitchenObject kitchenObject;
+    private PlayerController playerController;
+    private PlayerInteraction playerInteraction;
+    private PlayerVisual playerVisual;
 
     private void Awake()
     {
-        #region Singleton
-
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.LogError("There are more than one Player");
-        }
-
-        #endregion
+        playerController = GetComponent<PlayerController>();
+        playerVisual = GetComponent<PlayerVisual>();
+        playerInteraction = GetComponent<PlayerInteraction>();
     }
 
     public Transform GetKitchenObjectLocationTransform()
@@ -50,5 +44,20 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public bool HasKitchenObject()
     {
         return kitchenObject != null;
+    }
+
+    public void EnablePlayer()
+    {
+        playerController.enabled = true;
+        playerVisual.enabled = true;
+        playerInteraction.enabled = true;
+        playerInteraction.SubscribeToInteractEvents();
+    }
+    
+    public void DisablePlayer()
+    {
+        playerController.enabled = false;
+        playerVisual.enabled = false;
+        playerInteraction.enabled = false;
     }
 }

@@ -12,15 +12,15 @@ public class CuttingCounter : Counter, IAlternateInteractable, IHasProgress
     private CuttingRecipeSO cuttingRecipeSO;
     private int cuttingProgress;
     
-    public override void Interact()
+    public override void Interact(Player interactedPlayer)
     {
-        KitchenObject kitchenObjectPlayer = Player.Instance.GetKitchenObject();
+        KitchenObject kitchenObjectPlayer = interactedPlayer.GetKitchenObject();
 
         if (!HasKitchenObject())
         {
             if (HasRecipeWithInput(kitchenObjectPlayer.GetKitchenObjectSO()))
             {
-                Player.Instance.GetKitchenObject().SetKitchenObjectParent(this);
+                interactedPlayer.GetKitchenObject().SetKitchenObjectParent(this);
                 cuttingRecipeSO = GetCuttingRecipeWithInput(kitchenObjectPlayer.GetKitchenObjectSO());
             }
         }
@@ -28,7 +28,7 @@ public class CuttingCounter : Counter, IAlternateInteractable, IHasProgress
         {
             if (kitchenObjectPlayer == null)
             {
-                GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+                GetKitchenObject().SetKitchenObjectParent(interactedPlayer);
             }
             else if (kitchenObjectPlayer.TryGetComponent(out Plate playerPlate))
             {
@@ -39,9 +39,9 @@ public class CuttingCounter : Counter, IAlternateInteractable, IHasProgress
             }
             else if (HasRecipeWithInput(kitchenObjectPlayer.GetKitchenObjectSO()))
             {
-                KitchenObject oldKitchenObjectPlayer = Player.Instance.GetKitchenObject();
+                KitchenObject oldKitchenObjectPlayer = interactedPlayer.GetKitchenObject();
                 oldKitchenObjectPlayer.SetParentNull();
-                GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+                GetKitchenObject().SetKitchenObjectParent(interactedPlayer);
                 oldKitchenObjectPlayer.SetKitchenObjectParent(this);
                 cuttingRecipeSO = GetCuttingRecipeWithInput(oldKitchenObjectPlayer.GetKitchenObjectSO());
             }

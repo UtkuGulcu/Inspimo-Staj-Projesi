@@ -18,32 +18,33 @@ public class IngredientCounter : Counter
         stockCount = 20;
     }
 
-    public override void Interact()
+    public override void Interact(Player interactedPlayer)
     {
         if (stockCount <= 0)
         {
             return;
         }
-        
-        if (!Player.Instance.HasKitchenObject())
+
+        KitchenObject kitchenObjectPlayer = interactedPlayer.GetKitchenObject();
+
+        if (kitchenObjectPlayer == null)
         {
-            KitchenObject.SpawnKitchenObject(kitchenObjectSO, Player.Instance);
+            KitchenObject.SpawnKitchenObject(kitchenObjectSO, interactedPlayer);
             stockCount--;
             OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
         }
-        else if (Player.Instance.GetKitchenObject().GetKitchenObjectSO() == kitchenObjectSO) 
+        else if (kitchenObjectPlayer.GetKitchenObjectSO() == kitchenObjectSO) 
         {
-            Player.Instance.GetKitchenObject().DestroySelf();
+            kitchenObjectPlayer.DestroySelf();
             stockCount++;
             OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
         }
-        else if (Player.Instance.GetKitchenObject().TryGetComponent(out Plate plate))
+        else if (kitchenObjectPlayer.TryGetComponent(out Plate plate))
         {
-            if (plate.TryToAddToPlate(kitchenObjectSO))
-            {
-                stockCount--;
-                OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
-            }
+            if (!plate.TryToAddToPlate(kitchenObjectSO)) return;
+            
+            stockCount--;
+            OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
         }
     }
 }

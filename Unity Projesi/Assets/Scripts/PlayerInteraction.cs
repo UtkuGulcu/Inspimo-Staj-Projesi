@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -12,17 +10,21 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] [Range(0, 3)] private float interactionDistance;
     [SerializeField] private LayerMask interactionLayer;
     private GameObject lastInteractedObject;
+    private Player player;
+
+    private void Awake()
+    {
+        player = GetComponent<Player>();
+    }
 
     private void Start()
     {
-        UIManager.Instance.OnInteractButtonDown += UIManager_OnInteractButtonDown;
-        UIManager.Instance.OnAlternateInteractButtonDown += UIManager_OnAlternateInteractButtonDown;
+        SubscribeToInteractEvents();
     }
 
     private void OnDisable()
     {
-        UIManager.Instance.OnInteractButtonDown -= UIManager_OnInteractButtonDown;
-        UIManager.Instance.OnAlternateInteractButtonDown -= UIManager_OnAlternateInteractButtonDown;
+        UnsubscribeToInteractEvents();
     }
 
     private void Update()
@@ -31,8 +33,13 @@ public class PlayerInteraction : MonoBehaviour
         if (Physics.Raycast(interactionOrigin.position, transform.forward, out RaycastHit hit, interactionDistance))
         {
             // If this is the first frame of the hit
-            if (hit.transform.TryGetComponent(out IInteractable InteractableOnRange) && lastInteractedObject == null)
+            if (hit.transform.TryGetComponent(out IInteractable InteractableOnRange) && lastInteractedObject != hit.transform.gameObject)
             {
+                if (lastInteractedObject != null)
+                {
+                    lastInteractedObject.GetComponent<IInteractable>().StopInteracting();
+                }
+                
                 lastInteractedObject = hit.transform.gameObject;
                 InteractableOnRange.StartInteracting();
             }
@@ -42,6 +49,18 @@ public class PlayerInteraction : MonoBehaviour
         {
             lastInteractedObject.GetComponent<IInteractable>().StopInteracting();
             lastInteractedObject = null;
+        }
+    }
+
+    private void UIManager_OnInteractButtonDown(object sender, EventArgs e)
+    {
+        if (Physics.Raycast(interactionOrigin.position, transform.forward, out RaycastHit hit, interactionDistance, interactionLayer))
+        {
+            if (hit.transform.TryGetComponent(out IInteractable Interactable))
+            {
+                Interactable.Interact(player);
+                Debug.Log($"interact event {gameObject.name}");
+            }
         }
     }
     
@@ -56,14 +75,16 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    private void UIManager_OnInteractButtonDown(object sender, EventArgs e)
+    public void SubscribeToInteractEvents()
     {
-        if (Physics.Raycast(interactionOrigin.position, transform.forward, out RaycastHit hit, interactionDistance, interactionLayer))
-        {
-            if (hit.transform.TryGetComponent(out IInteractable Interactable))
-            {
-                Interactable.Interact();
-            }
-        }
+        UIManager.Instance.OnInteractButtonDown += UIManager_OnInteractButtonDown;
+        UIManager.Instance.OnAlternateInteractButtonDown += UIManager_OnAlternateInteractButtonDown;
+    }
+    
+    private void UnsubscribeToInteractEvents()
+    {
+        Debug.Log($"{gameObject} is listening");
+        UIManager.Instance.OnInteractButtonDown += UIManager_OnInteractButtonDown;
+        UIManager.Instance.OnAlternateInteractButtonDown += UIManager_OnAlternateInteractButtonDown;
     }
 }

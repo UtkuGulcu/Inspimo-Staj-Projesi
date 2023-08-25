@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 movementVector;
     private Rigidbody rb;
     private bool isWalking;
+    private Quaternion toRotation;
 
     private void Awake()
     {
@@ -30,10 +31,11 @@ public class PlayerController : MonoBehaviour
         
         if (verticalInput != 0 && horizontalInput != 0)
         {
-            Quaternion toRotation = Quaternion.LookRotation(movementVector, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+            toRotation = Quaternion.LookRotation(movementVector, Vector3.up);
             isWalking = true;
         }
+        
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
     }
 
     private void FixedUpdate()

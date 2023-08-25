@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class ClearCounter : Counter
 {
-    public override void Interact()
+    public override void Interact(Player interactedPlayer)
     {
+        KitchenObject kitchenObjectPlayer = interactedPlayer.GetKitchenObject();
+        
         if (!HasKitchenObject())
         {
-            if (Player.Instance.HasKitchenObject())
+            if (kitchenObjectPlayer != null)
             {
-                Player.Instance.GetKitchenObject().SetKitchenObjectParent(this);
+                kitchenObjectPlayer.SetKitchenObjectParent(this);
             }
         }
         else
         {
-            if (!Player.Instance.HasKitchenObject())
+            if (kitchenObjectPlayer == null)
             {
-                GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+                GetKitchenObject().SetKitchenObjectParent(interactedPlayer);
             }
-            else if (Player.Instance.GetKitchenObject().TryGetComponent(out Plate playerPlate))
+            else if (kitchenObjectPlayer.TryGetComponent(out Plate playerPlate))
             {
                 if (playerPlate.TryToAddToPlate(GetKitchenObject().GetKitchenObjectSO()))
                 {
@@ -28,17 +30,17 @@ public class ClearCounter : Counter
             }
             else if (GetKitchenObject().TryGetComponent(out Plate counterPlate))
             {
-                if (counterPlate.TryToAddToPlate(Player.Instance.GetKitchenObject().GetKitchenObjectSO()))
+                if (counterPlate.TryToAddToPlate(kitchenObjectPlayer.GetKitchenObjectSO()))
                 {
-                    Player.Instance.GetKitchenObject().DestroySelf();
-                    GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+                    kitchenObjectPlayer.DestroySelf();
+                    GetKitchenObject().SetKitchenObjectParent(interactedPlayer);
                 }
             }
             else
             {
-                KitchenObject oldKitchenObject = Player.Instance.GetKitchenObject();
+                KitchenObject oldKitchenObject = kitchenObjectPlayer;
                 oldKitchenObject.SetParentNull();
-                GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+                GetKitchenObject().SetKitchenObjectParent(interactedPlayer);
                 oldKitchenObject.SetKitchenObjectParent(this);
             }
         }

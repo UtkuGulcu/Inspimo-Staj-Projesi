@@ -30,9 +30,9 @@ public class Counter : MonoBehaviour, IInteractable, IKitchenObjectParent
         SelectedObjectVisual.Hide();
     }
 
-    public virtual void Interact()
+    public virtual void Interact(Player interactedPlayer)
     {
-        Debug.LogError("Base.Interact() shouldn't be executed. All counters should implement their own methods");
+        Debug.LogError("Base.Interact() should never be executed. All counters should implement their own!");
     }
 
     public Transform GetKitchenObjectLocationTransform()

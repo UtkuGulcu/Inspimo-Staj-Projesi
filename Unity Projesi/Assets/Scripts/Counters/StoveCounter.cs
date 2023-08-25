@@ -75,28 +75,28 @@ public class StoveCounter : Counter, IHasProgress
         }
     }
 
-    public override void Interact()
+    public override void Interact(Player interactedPlayer)
     {
         switch (state)
         {
             case State.Idle:
-                HandleIdleInteraction();
+                HandleIdleInteraction(interactedPlayer);
                 break;
             case State.Frying:
-                HandleFryingInteraction();
+                HandleFryingInteraction(interactedPlayer);
                 break;
             case State.Burning:
-                HandleBurningInteraction();
+                HandleBurningInteraction(interactedPlayer);
                 break;
             case State.Burned:
-                HandleBurningInteraction();
+                HandleBurningInteraction(interactedPlayer);
                 break;
         }
     }
 
-    private void HandleIdleInteraction()
+    private void HandleIdleInteraction(Player interactedPlayer)
     {
-        KitchenObject kitchenObjectPlayer = Player.Instance.GetKitchenObject();
+        KitchenObject kitchenObjectPlayer = interactedPlayer.GetKitchenObject();
         
         if (kitchenObjectPlayer == null || !HasRecipeWithInput(kitchenObjectPlayer.GetKitchenObjectSO()))
         {
@@ -111,21 +111,21 @@ public class StoveCounter : Counter, IHasProgress
         ChangeState(State.Frying);
     }
     
-    private void HandleFryingInteraction()
+    private void HandleFryingInteraction(Player interactedPlayer)
     {
-        KitchenObject kitchenObjectPlayer = Player.Instance.GetKitchenObject();
+        KitchenObject kitchenObjectPlayer = interactedPlayer.GetKitchenObject();
 
         if (kitchenObjectPlayer == null)
         {
             timer = 0f;
-            GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+            GetKitchenObject().SetKitchenObjectParent(interactedPlayer);
             ChangeState(State.Idle);
             InvokeProgressChangedEvent(0f);
         }
         else if (HasRecipeWithInput(kitchenObjectPlayer.GetKitchenObjectSO()))
         {
             kitchenObjectPlayer.SetParentNull();
-            GetKitchenObject().SetKitchenObjectParent(Player.Instance);
+            GetKitchenObject().SetKitchenObjectParent(interactedPlayer);
             kitchenObjectPlayer.SetKitchenObjectParent(this);
             timer = 0f;
             ChangeState(State.Idle);
@@ -133,9 +133,9 @@ public class StoveCounter : Counter, IHasProgress
         }
     }
 
-    private void HandleBurningInteraction()
+    private void HandleBurningInteraction(Player interactedPlayer)
     {
-        KitchenObject kitchenObjectPlayer = Player.Instance.GetKitchenObject();
+        KitchenObject kitchenObjectPlayer = interactedPlayer.GetKitchenObject();
 
         if (kitchenObjectPlayer == null)
         {
