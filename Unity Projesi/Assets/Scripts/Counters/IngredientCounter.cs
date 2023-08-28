@@ -12,9 +12,8 @@ public class IngredientCounter : Counter
     
     private int stockCount;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         stockCount = 20;
     }
 

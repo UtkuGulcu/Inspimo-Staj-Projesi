@@ -59,7 +59,6 @@ public class PlayerInteraction : MonoBehaviour
             if (hit.transform.TryGetComponent(out IInteractable Interactable))
             {
                 Interactable.Interact(player);
-                Debug.Log($"interact event {gameObject.name}");
             }
         }
     }
@@ -77,14 +76,16 @@ public class PlayerInteraction : MonoBehaviour
 
     public void SubscribeToInteractEvents()
     {
-        UIManager.Instance.OnInteractButtonDown += UIManager_OnInteractButtonDown;
-        UIManager.Instance.OnAlternateInteractButtonDown += UIManager_OnAlternateInteractButtonDown;
+        if (!UIManager.Instance.HasEventListeners())
+        {
+            UIManager.Instance.OnInteractButtonDown += UIManager_OnInteractButtonDown;
+            UIManager.Instance.OnAlternateInteractButtonDown += UIManager_OnAlternateInteractButtonDown;    
+        }
     }
     
     private void UnsubscribeToInteractEvents()
     {
-        Debug.Log($"{gameObject} is listening");
-        UIManager.Instance.OnInteractButtonDown += UIManager_OnInteractButtonDown;
-        UIManager.Instance.OnAlternateInteractButtonDown += UIManager_OnAlternateInteractButtonDown;
+        UIManager.Instance.OnInteractButtonDown -= UIManager_OnInteractButtonDown;
+        UIManager.Instance.OnAlternateInteractButtonDown -= UIManager_OnAlternateInteractButtonDown;
     }
 }

@@ -8,7 +8,7 @@ public class PlatesCounter : Counter
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
     private KitchenObject kitchenObjectPlate;
 
-    protected override void Start()
+    private void Start()
     {
         KitchenObject.SpawnKitchenObject(kitchenObjectSO, this);
         kitchenObjectPlate = GetKitchenObject();

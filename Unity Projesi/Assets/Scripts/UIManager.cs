@@ -39,4 +39,9 @@ public class UIManager : MonoBehaviour
         AlternateInteractButton.onClick.AddListener(() => OnAlternateInteractButtonDown?.Invoke(this, EventArgs.Empty));
         SwitchCharacterButton.onClick.AddListener(() => OnSwitchCharacterButtonDown?.Invoke(this, EventArgs.Empty));
     }
+
+    public bool HasEventListeners()
+    {
+        return OnInteractButtonDown != null;
+    }
 }

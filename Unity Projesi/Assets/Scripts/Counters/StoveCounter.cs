@@ -31,7 +31,7 @@ public class StoveCounter : Counter, IHasProgress
     private State state;
     private float timer;
 
-    protected override void Update()
+    private void Update()
     {
         switch (state)
         {

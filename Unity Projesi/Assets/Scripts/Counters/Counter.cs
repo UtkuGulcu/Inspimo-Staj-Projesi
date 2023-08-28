@@ -9,16 +9,6 @@ public class Counter : MonoBehaviour, IInteractable, IKitchenObjectParent
     [SerializeField] private Transform kitchenObjectLocationTransform;
 
     private KitchenObject kitchenObject;
-    
-    protected virtual void Start()
-    {
-        
-    }
-
-    protected virtual void Update()
-    {
-        
-    }
 
     public void StartInteracting()
     {

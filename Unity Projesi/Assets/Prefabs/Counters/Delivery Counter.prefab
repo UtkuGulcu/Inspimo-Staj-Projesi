@@ -240,7 +240,7 @@ GameObject:
   - component: {fileID: 3883423233023567528}
   - component: {fileID: 2684727343121126522}
   - component: {fileID: 5213911769621277744}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Delivery Counter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
