@@ -9,6 +9,7 @@ public class Customer : MonoBehaviour
     private CustomerVisual customerVisual;
     private NavMeshAgent navMeshAgent;
     private Vector3 chairSittingLocation;
+    private Table targetTable;
 
     private void Awake()
     {
@@ -33,16 +34,14 @@ public class Customer : MonoBehaviour
             customerVisual.StopMoving();
             transform.position = chairSittingLocation;
             navMeshAgent.enabled = false;
+            targetTable.ChangeState(Table.State.WaitingToOrder);
         }
     }
-
-    public void SetDestination(Vector3 targetDestination)
+    
+    public void SetTargetTable(Table targetTable)
     {
-        navMeshAgent.SetDestination(targetDestination);
-    }
-
-    public void SetChairSittingLocation(Vector3 chairSittingLocation)
-    {
-        this.chairSittingLocation = chairSittingLocation;
+        this.targetTable = targetTable;
+        navMeshAgent.SetDestination(targetTable.transform.position);
+        chairSittingLocation = targetTable.GetChairSittingLocation();
     }
 }

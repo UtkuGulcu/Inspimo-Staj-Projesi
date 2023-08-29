@@ -38,7 +38,6 @@ public class CustomerManager : MonoBehaviour
         Customer customer = Instantiate(customerPrefabList[randomCustomerIndex], restaurantEntryPoint.position, Quaternion.identity).GetComponent<Customer>();
 
         Table targetTable = availableTableList[randomTableIndex];
-        customer.SetDestination(targetTable.transform.position);
-        customer.SetChairSittingLocation(targetTable.GetChairSittingLocation());
+        customer.SetTargetTable(targetTable);
     }
 }

@@ -14,11 +14,11 @@ public class Plate : KitchenObject
     
     [SerializeField] private List<KitchenObjectSO> ValidObjects;
 
-    private List<KitchenObjectSO> objectsInPlate;
+    private List<KitchenObjectSO> ingredientsInPlate;
 
     private void Start()
     {
-        objectsInPlate = new List<KitchenObjectSO>();
+        ingredientsInPlate = new List<KitchenObjectSO>();
     }
 
     public bool TryToAddToPlate(KitchenObjectSO kitchenObjectSO)
@@ -28,17 +28,22 @@ public class Plate : KitchenObject
             return false;
         }
 
-        if (objectsInPlate.Contains(kitchenObjectSO))
+        if (ingredientsInPlate.Contains(kitchenObjectSO))
         {
             return false;
         }
 
-        objectsInPlate.Add(kitchenObjectSO);
+        ingredientsInPlate.Add(kitchenObjectSO);
         OnObjectAdded?.Invoke(this, new OnObjectAddedEventArgs
         {
             addedObject = kitchenObjectSO
         });
 
         return true;
+    }
+
+    public List<KitchenObjectSO> GetIngredientsInPlate()
+    {
+        return ingredientsInPlate;
     }
 }
