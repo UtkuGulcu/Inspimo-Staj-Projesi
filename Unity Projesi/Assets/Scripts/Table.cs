@@ -80,8 +80,6 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
             case State.WaitingOrder:
                 HandleWaitingOrderInteraction(interactedPlayer);
                 break;
-            case State.Eating:
-                break;
         }
     }
 
@@ -103,19 +101,23 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
 
     private void HandleWaitingOrderInteraction(Player player)
     {
-        if (!player.HasKitchenObject() || player.GetKitchenObject() is not Plate)
+        KitchenObject playerKitchenObject = player.GetKitchenObject();
+        
+        if (playerKitchenObject == null || playerKitchenObject is not Plate)
         {
             return;
         }
 
-        Plate playerPlate = player.GetKitchenObject().GetComponent<Plate>();
+        Plate playerPlate = playerKitchenObject.GetComponent<Plate>();
 
-        if (playerPlate.GetIngredientsInPlate().Count != orderedRecipe.kitchenObjectSOList.Count)
+        if (!IsValidPlate(playerPlate.GetIngredientsInPlate()))
         {
             return;
         }
-
-        Debug.Log(IsValidPlate(playerPlate.GetIngredientsInPlate()));
+        
+        playerKitchenObject.SetKitchenObjectParent(this);
+        
+        ChangeState(State.Eating);
     }
 
     public void ChangeState(State newState)
