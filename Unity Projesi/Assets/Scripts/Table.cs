@@ -32,9 +32,11 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
     [SerializeField] private Transform kitchenObjectLocationTransform;
     [SerializeField] private Transform chairSittingLocation;
     [SerializeField] private RecipeListSO recipeListSO;
+    [SerializeField] private Transform dropOffLocation;
 
     private KitchenObject kitchenObject;
     private RecipeSO orderedRecipe;
+    private Customer customer;
     private bool isOccupied;
     private State state;
     private float timer;
@@ -48,23 +50,39 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
                 break;
             
             case State.WaitingToOrder or State.WaitingOrder:
-                HandleTimerLogic();
+                HandleOrderTimerLogic();
                 break;
             
             case State.Eating:
+                HandleEatingTimerLogic();
                 break;
+        }
+
+        // For testing delete later
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            ChangeState(State.Eating);
         }
     }
 
-    private void HandleTimerLogic()
+    private void HandleOrderTimerLogic()
     {
         timer -= Time.deltaTime;
         InvokeOnProgressChangedEvent(timer / timerMax);
 
         if (timer <= 0f)
         {
-            // Implement waitingToOrder fail logic
-            ChangeState(State.Idle);
+            HandleFailState();
+        }
+    }
+    
+    private void HandleEatingTimerLogic()
+    {
+        timer -= Time.deltaTime;
+
+        if (timer <= 0f)
+        {
+            HandleFailState();
         }
     }
     
@@ -129,13 +147,31 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
             case State.WaitingToOrder:
                 timerMax = 40f;
                 break;
+            
             case State.WaitingOrder:
                 timerMax = 80f;
+                break;
+            
+            case State.Eating:
+                timerMax = 10f;
                 break;
         }
         
         timer = timerMax;
         InvokeOnStateChangedEvent(newState);
+    }
+
+    private void HandleFailState()
+    {
+        customer.LeaveRestaurant();
+        ChangeState(State.Idle);
+    }
+
+    private void HandleEatingDone()
+    {
+        customer.LeaveRestaurant();
+        ChangeState(State.Idle);
+        ResourceManager.Instance.IncreaseMoney(orderedRecipe.price);
     }
     
     public void StartInteracting()
@@ -232,5 +268,16 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         }
 
         return true;
+    }
+
+    public void SetCustomer(Customer customer)
+    {
+        this.customer = customer;
+        ChangeState(State.WaitingToOrder);
+    }
+
+    public Vector3 GetDropOffLocation()
+    {
+        return dropOffLocation.position;
     }
 }

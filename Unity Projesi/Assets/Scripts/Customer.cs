@@ -6,15 +6,18 @@ using UnityEngine.AI;
 
 public class Customer : MonoBehaviour
 {
+
     private CustomerVisual customerVisual;
     private NavMeshAgent navMeshAgent;
     private Vector3 chairSittingLocation;
     private Table targetTable;
+    private bool isGoingToTable;
 
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         customerVisual = GetComponent<CustomerVisual>();
+        isGoingToTable = true;
     }
 
     private void Start()
@@ -24,7 +27,7 @@ public class Customer : MonoBehaviour
 
     private void Update()
     {
-        if (!navMeshAgent.enabled)
+        if (!navMeshAgent.enabled || !isGoingToTable)
         {
             return;
         }
@@ -34,7 +37,7 @@ public class Customer : MonoBehaviour
             customerVisual.StopMoving();
             transform.position = chairSittingLocation;
             navMeshAgent.enabled = false;
-            targetTable.ChangeState(Table.State.WaitingToOrder);
+            targetTable.SetCustomer(this);
         }
     }
     
@@ -43,5 +46,24 @@ public class Customer : MonoBehaviour
         this.targetTable = targetTable;
         navMeshAgent.SetDestination(targetTable.transform.position);
         chairSittingLocation = targetTable.GetChairSittingLocation();
+    }
+
+    public void LeaveRestaurant()
+    {
+        isGoingToTable = false;
+        transform.position = targetTable.GetDropOffLocation();
+        navMeshAgent.enabled = true;
+        navMeshAgent.SetDestination(CustomerManager.Instance.GetRestaurantEntryPoint());
+        customerVisual.StartMoving();
+    }
+
+    public void DestroySelf()
+    {
+        Destroy(gameObject);
+    }
+
+    public bool IsGoingToTable()
+    {
+        return isGoingToTable;
     }
 }

@@ -9,17 +9,10 @@ public class IngredientCounter : Counter
     public event EventHandler OnPlayerPickedIngredient;
     
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
-    
-    private int stockCount;
-
-    private void Start()
-    {
-        stockCount = 20;
-    }
 
     public override void Interact(Player interactedPlayer)
     {
-        if (stockCount <= 0)
+        if (ResourceManager.Instance.IsKitchenObjectAvailable(kitchenObjectSO))
         {
             return;
         }
@@ -29,20 +22,20 @@ public class IngredientCounter : Counter
         if (kitchenObjectPlayer == null)
         {
             KitchenObject.SpawnKitchenObject(kitchenObjectSO, interactedPlayer);
-            stockCount--;
+            ResourceManager.Instance.DecreaseKitchenObjectAmount(kitchenObjectSO, 1);
             OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
         }
         else if (kitchenObjectPlayer.GetKitchenObjectSO() == kitchenObjectSO) 
         {
             kitchenObjectPlayer.DestroySelf();
-            stockCount++;
+            ResourceManager.Instance.IncreaseKitchenObjectAmount(kitchenObjectSO, 1);
             OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
         }
         else if (kitchenObjectPlayer.TryGetComponent(out Plate plate))
         {
             if (!plate.TryToAddToPlate(kitchenObjectSO)) return;
             
-            stockCount--;
+            ResourceManager.Instance.DecreaseKitchenObjectAmount(kitchenObjectSO, 1);
             OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
         }
     }

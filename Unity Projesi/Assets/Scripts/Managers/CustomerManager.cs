@@ -1,13 +1,30 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class CustomerManager : MonoBehaviour
 {
+    public static CustomerManager Instance { get; private set; }
+    
     [SerializeField] private List<Table> tables;
     [SerializeField] private List<GameObject> customerPrefabList;
     [SerializeField] private Transform restaurantEntryPoint;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogError("There are more than one Customer Managers!!");
+            Destroy(this);
+        }
+    }
 
     private void Start()
     {
@@ -39,5 +56,10 @@ public class CustomerManager : MonoBehaviour
 
         Table targetTable = availableTableList[randomTableIndex];
         customer.SetTargetTable(targetTable);
+    }
+
+    public Vector3 GetRestaurantEntryPoint()
+    {
+        return restaurantEntryPoint.position;
     }
 }
