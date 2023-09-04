@@ -8,10 +8,13 @@ using Random = UnityEngine.Random;
 public class CustomerManager : MonoBehaviour
 {
     public static CustomerManager Instance { get; private set; }
-    
-    [SerializeField] private List<Table> tables;
+
     [SerializeField] private List<GameObject> customerPrefabList;
     [SerializeField] private Transform restaurantEntryPoint;
+
+    private Table[] tables;
+    private float timer;
+    private float timerMax = 30f;
 
     private void Awake()
     {
@@ -28,7 +31,19 @@ public class CustomerManager : MonoBehaviour
 
     private void Start()
     {
+        tables = FindObjectsByType<Table>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         TryToSpawnCustomer();
+    }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+
+        if (timer >= timerMax)
+        {
+            timer = 0;
+            TryToSpawnCustomer();
+        }
     }
 
     private void TryToSpawnCustomer()
@@ -52,6 +67,7 @@ public class CustomerManager : MonoBehaviour
 
         int randomCustomerIndex = Random.Range(0, customerPrefabList.Count);
         int randomTableIndex = Random.Range(0, availableTableList.Count);
+        
         Customer customer = Instantiate(customerPrefabList[randomCustomerIndex], restaurantEntryPoint.position, Quaternion.identity).GetComponent<Customer>();
 
         Table targetTable = availableTableList[randomTableIndex];

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class ControlButtonsUI : MonoBehaviour
 {
-    public static UIManager Instance { get; private set; }
+    public static ControlButtonsUI Instance { get; private set; }
 
     public event EventHandler OnInteractButtonDown;
     public event EventHandler OnAlternateInteractButtonDown;

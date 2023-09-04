@@ -12,7 +12,7 @@ public class IngredientCounter : Counter
 
     public override void Interact(Player interactedPlayer)
     {
-        if (ResourceManager.Instance.IsKitchenObjectAvailable(kitchenObjectSO))
+        if (!ResourceManager.Instance.IsKitchenObjectAvailable(kitchenObjectSO))
         {
             return;
         }

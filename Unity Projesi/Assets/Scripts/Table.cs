@@ -21,17 +21,23 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
     
     public class OnRecipeOrderedEventArgs : EventArgs
     {
-        public string recipeName;
+        public RecipeSO recipeSO;
     }
     
+    public class OnRecipeDoneEventArgs : EventArgs
+    {
+        public RecipeSO recipeSO;
+    }
+
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
     public event EventHandler<OnRecipeOrderedEventArgs> OnRecipeOrdered;
+    public event EventHandler<OnRecipeDoneEventArgs> OnRecipeDone;
     
     [SerializeField] private SelectedObjectVisual SelectedObjectVisual;
+    [SerializeField] private RecipeListSO recipeListSO;
     [SerializeField] private Transform kitchenObjectLocationTransform;
     [SerializeField] private Transform chairSittingLocation;
-    [SerializeField] private RecipeListSO recipeListSO;
     [SerializeField] private Transform dropOffLocation;
 
     private KitchenObject kitchenObject;
@@ -57,12 +63,6 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
                 HandleEatingTimerLogic();
                 break;
         }
-
-        // For testing delete later
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            ChangeState(State.Eating);
-        }
     }
 
     private void HandleOrderTimerLogic()
@@ -82,7 +82,7 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
 
         if (timer <= 0f)
         {
-            HandleFailState();
+            HandleEatingDone();
         }
     }
     
@@ -113,7 +113,7 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
 
         OnRecipeOrdered?.Invoke(this, new OnRecipeOrderedEventArgs
         {
-            recipeName = orderedRecipe.name
+            recipeSO = orderedRecipe
         });
     }
 
@@ -134,22 +134,23 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         }
         
         playerKitchenObject.SetKitchenObjectParent(this);
-        
         ChangeState(State.Eating);
+        
+        InvokeOnRecipeDone(orderedRecipe);
     }
 
-    public void ChangeState(State newState)
+    private void ChangeState(State newState)
     {
         state = newState;
         
         switch (state)
         {
             case State.WaitingToOrder:
-                timerMax = 40f;
+                timerMax = 60f;
                 break;
             
             case State.WaitingOrder:
-                timerMax = 80f;
+                timerMax = 100f;
                 break;
             
             case State.Eating:
@@ -165,13 +166,17 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
     {
         customer.LeaveRestaurant();
         ChangeState(State.Idle);
+        isOccupied = false;
+        InvokeOnRecipeDone(orderedRecipe);
     }
 
     private void HandleEatingDone()
     {
+        GetKitchenObject().DestroySelf();
         customer.LeaveRestaurant();
         ChangeState(State.Idle);
         ResourceManager.Instance.IncreaseMoney(orderedRecipe.price);
+        isOccupied = false;
     }
     
     public void StartInteracting()
@@ -214,6 +219,11 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         return isOccupied;
     }
 
+    public void SetOccupied()
+    {
+        isOccupied = true;
+    }
+
     public Vector3 GetChairSittingLocation()
     {
         return chairSittingLocation.position;
@@ -232,6 +242,14 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
         {
             newState = newState,
+        });
+    }
+
+    private void InvokeOnRecipeDone(RecipeSO recipeSO)
+    {
+        OnRecipeDone?.Invoke(this, new OnRecipeDoneEventArgs
+        {
+            recipeSO = recipeSO
         });
     }
 

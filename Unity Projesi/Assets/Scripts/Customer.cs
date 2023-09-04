@@ -46,6 +46,7 @@ public class Customer : MonoBehaviour
         this.targetTable = targetTable;
         navMeshAgent.SetDestination(targetTable.transform.position);
         chairSittingLocation = targetTable.GetChairSittingLocation();
+        targetTable.SetOccupied();
     }
 
     public void LeaveRestaurant()

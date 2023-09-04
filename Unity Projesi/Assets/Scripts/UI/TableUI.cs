@@ -71,7 +71,7 @@ public class TableUI : MonoBehaviour
 
     private void Table_OnRecipeOrdered(object sender, Table.OnRecipeOrderedEventArgs e)
     {
-        recipeNameText.text = e.recipeName;
+        recipeNameText.text = e.recipeSO.name;
     }
     
     

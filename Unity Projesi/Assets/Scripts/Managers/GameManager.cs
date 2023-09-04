@@ -18,13 +18,13 @@ public class GameManager : MonoBehaviour
     
     private void Start()
     {
-        UIManager.Instance.OnSwitchCharacterButtonDown += UIManager_OnSwitchCharacterButtonDown;
+        ControlButtonsUI.Instance.OnSwitchCharacterButtonDown += UIManager_OnSwitchCharacterButtonDown;
         activeCharacter = ActiveCharacter.Waiter;
     }
 
     private void OnDisable()
     {
-        UIManager.Instance.OnSwitchCharacterButtonDown -= UIManager_OnSwitchCharacterButtonDown;
+        ControlButtonsUI.Instance.OnSwitchCharacterButtonDown -= UIManager_OnSwitchCharacterButtonDown;
     }
 
     private void UIManager_OnSwitchCharacterButtonDown(object sender, EventArgs e)

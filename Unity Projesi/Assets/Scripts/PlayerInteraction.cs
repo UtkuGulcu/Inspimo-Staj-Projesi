@@ -76,16 +76,16 @@ public class PlayerInteraction : MonoBehaviour
 
     public void SubscribeToInteractEvents()
     {
-        if (!UIManager.Instance.HasEventListeners())
+        if (!ControlButtonsUI.Instance.HasEventListeners())
         {
-            UIManager.Instance.OnInteractButtonDown += UIManager_OnInteractButtonDown;
-            UIManager.Instance.OnAlternateInteractButtonDown += UIManager_OnAlternateInteractButtonDown;    
+            ControlButtonsUI.Instance.OnInteractButtonDown += UIManager_OnInteractButtonDown;
+            ControlButtonsUI.Instance.OnAlternateInteractButtonDown += UIManager_OnAlternateInteractButtonDown;    
         }
     }
     
     private void UnsubscribeToInteractEvents()
     {
-        UIManager.Instance.OnInteractButtonDown -= UIManager_OnInteractButtonDown;
-        UIManager.Instance.OnAlternateInteractButtonDown -= UIManager_OnAlternateInteractButtonDown;
+        ControlButtonsUI.Instance.OnInteractButtonDown -= UIManager_OnInteractButtonDown;
+        ControlButtonsUI.Instance.OnAlternateInteractButtonDown -= UIManager_OnAlternateInteractButtonDown;
     }
 }
