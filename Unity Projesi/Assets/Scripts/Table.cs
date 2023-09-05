@@ -103,11 +103,6 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
 
     private void HandleWaitingToOrderInteraction(Player player)
     {
-        if (player.HasKitchenObject())
-        {
-            return;
-        }
-        
         OrderRandomRecipe();
         ChangeState(State.WaitingOrder);
 

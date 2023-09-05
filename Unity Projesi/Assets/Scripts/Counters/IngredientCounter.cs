@@ -39,4 +39,9 @@ public class IngredientCounter : Counter
             OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
         }
     }
+
+    public KitchenObjectSO GetIngredient()
+    {
+        return kitchenObjectSO;
+    }
 }

@@ -46,10 +46,7 @@ public class ResourceManager : MonoBehaviour
             Debug.LogError("There are more than one Resource Managers!!");
             Destroy(this);
         }
-    }
-
-    private void Start()
-    {
+        
         resourceDictionary = new Dictionary<ResourceType, int>
         {
             [ResourceType.Money] = 100,
@@ -104,5 +101,19 @@ public class ResourceManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public int GetResourceAmount(KitchenObjectSO kitchenObjectSO)
+    {
+        foreach (ResourceKitchenObject resourceKitchenObject in validResourceKitchenObjectList)
+        {
+            if (resourceKitchenObject.kitchenObjectSO == kitchenObjectSO)
+            {
+                return resourceDictionary[resourceKitchenObject.resourceType];
+            }
+        }
+
+        Debug.LogError("Resource couldn't be found");
+        return 0;
     }
 }
