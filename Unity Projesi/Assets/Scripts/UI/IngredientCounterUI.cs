@@ -8,15 +8,17 @@ public class IngredientCounterUI : MonoBehaviour
 {
     [SerializeField] private IngredientCounter ingredientCounter;
     [SerializeField] private TMP_Text stockText;
+    
+    private IngredientCounter[] ingredientCounterArray;
 
     private void Start()
     {
         transform.forward = Camera.main.transform.forward;
-        ingredientCounter.OnPlayerPickedIngredient += IngredientCounter_OnPlayerPickedIngredient;
+        ResourceManager.Instance.OnKitchenObjectResourceChanged += KitchenObjectResourceManagerOnKitchenObjectResourceChanged;
         UpdateText();
     }
 
-    private void IngredientCounter_OnPlayerPickedIngredient(object sender, EventArgs e)
+    private void KitchenObjectResourceManagerOnKitchenObjectResourceChanged(object sender, EventArgs e)
     {
         UpdateText();
     }

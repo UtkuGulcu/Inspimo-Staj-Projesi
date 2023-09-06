@@ -6,7 +6,14 @@ using UnityEngine.Serialization;
 
 public class ResourceManager : MonoBehaviour
 {
-    public enum ResourceType
+    [Serializable]
+    private struct ResourceKitchenObject
+    {
+        [SerializeField] public KitchenObjectSO kitchenObjectSO;
+        [SerializeField] public ResourceType resourceType;
+    }
+    
+    private enum ResourceType
     {
         Money,
         Meat,
@@ -15,24 +22,19 @@ public class ResourceManager : MonoBehaviour
         Cabbage,
         CheeseBlock
     }
-    
-    [Serializable]
-    private struct ResourceKitchenObject
+
+    public class OnMoneyChangedEventArgs : EventArgs
     {
-        [SerializeField] public KitchenObjectSO kitchenObjectSO;
-        [SerializeField] public ResourceType resourceType;
+        public int newMoneyAmount;
     }
 
     public static ResourceManager Instance { get; private set; }
 
-    private const string MEAT_NAME = "Uncooked Meat";
-    private const string BREAD_NAME = "Bread";
-    private const string TOMATO_NAME = "Tomato";
-    private const string CABBAGE_NAME = "Cabbage";
-    private const string CHEESE_BLOCK_NAME = "Cheese Block";
-    
-    [SerializeField] private List<ResourceKitchenObject> validResourceKitchenObjectList;
+    public event EventHandler OnKitchenObjectResourceChanged;
+    public event EventHandler<OnMoneyChangedEventArgs> OnMoneyChanged;
 
+    [SerializeField] private List<ResourceKitchenObject> validResourceKitchenObjectList;
+    
     private Dictionary<ResourceType, int> resourceDictionary;
     
     private void Awake()
@@ -58,34 +60,51 @@ public class ResourceManager : MonoBehaviour
         };
     }
 
-    public void IncreaseMoney(int amount)
+    public void IncreaseMoney(int addedAmount)
     {
-        resourceDictionary[ResourceType.Money] += amount;
+        int newAmount = resourceDictionary[ResourceType.Money]; 
+        newAmount += addedAmount;
+        resourceDictionary[ResourceType.Money] = newAmount;
+        InvokeOnMoneyChangedEvent(newAmount);
     }
     
-    public void DecreaseMoney(int amount)
+    public void DecreaseMoney(int subtractedAmount)
     {
-        resourceDictionary[ResourceType.Money] -= amount;
+        int newAmount = resourceDictionary[ResourceType.Money]; 
+        newAmount -= subtractedAmount;
+        resourceDictionary[ResourceType.Money] = newAmount;
+        InvokeOnMoneyChangedEvent(newAmount);
+    }
+    
+    public int GetMoney()
+    {
+        return resourceDictionary[ResourceType.Money];
     }
 
-    public void IncreaseKitchenObjectAmount(KitchenObjectSO kitchenObjectSO, int amount)
+    public void IncreaseKitchenObjectAmount(KitchenObjectSO kitchenObjectSO, int addedAmount)
     {
         foreach (ResourceKitchenObject resourceKitchenObject in validResourceKitchenObjectList)
         {
             if (resourceKitchenObject.kitchenObjectSO == kitchenObjectSO)
             {
-                resourceDictionary[resourceKitchenObject.resourceType]++;
+                int newAmount = resourceDictionary[resourceKitchenObject.resourceType];
+                newAmount += addedAmount;
+                resourceDictionary[resourceKitchenObject.resourceType] = newAmount;
+                InvokeOnKitchenObjectResourceChangedEvent();
             }
         }
     }
     
-    public void DecreaseKitchenObjectAmount(KitchenObjectSO kitchenObjectSO, int amount)
+    public void DecreaseKitchenObjectAmount(KitchenObjectSO kitchenObjectSO, int subtractedAmount)
     {
         foreach (ResourceKitchenObject resourceKitchenObject in validResourceKitchenObjectList)
         {
             if (resourceKitchenObject.kitchenObjectSO == kitchenObjectSO)
             {
-                resourceDictionary[resourceKitchenObject.resourceType]--;
+                int newAmount = resourceDictionary[resourceKitchenObject.resourceType];
+                newAmount -= subtractedAmount;
+                resourceDictionary[resourceKitchenObject.resourceType] = newAmount;
+                InvokeOnKitchenObjectResourceChangedEvent();
             }
         }
     }
@@ -115,5 +134,18 @@ public class ResourceManager : MonoBehaviour
 
         Debug.LogError("Resource couldn't be found");
         return 0;
+    }
+
+    private void InvokeOnKitchenObjectResourceChangedEvent()
+    {
+        OnKitchenObjectResourceChanged?.Invoke(this, EventArgs.Empty);
+    }
+    
+    private void InvokeOnMoneyChangedEvent(int newAmount)
+    {
+        OnMoneyChanged?.Invoke(this, new OnMoneyChangedEventArgs
+        {
+            newMoneyAmount = newAmount
+        });
     }
 }

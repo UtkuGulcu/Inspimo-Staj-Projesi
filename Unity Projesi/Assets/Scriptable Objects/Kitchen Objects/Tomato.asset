@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 91e8fe3de9249fc44b7bdd8050062896, type: 3}
   kitchenObjectName: Tomato
+  price: 3
   prefab: {fileID: 2319167448255501566, guid: d00fdda1390ffc749ba98b1db2732625, type: 3}

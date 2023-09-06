@@ -7,5 +7,6 @@ public class KitchenObjectSO : ScriptableObject
 {
    public Sprite icon;
    public string kitchenObjectName;
+   public int price;
    public GameObject prefab;
 }
