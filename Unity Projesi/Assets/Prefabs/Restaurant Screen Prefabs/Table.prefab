@@ -1476,9 +1476,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelectedObjectVisual: {fileID: 2005660729497534310}
+  recipeListSO: {fileID: 11400000, guid: 76415fbc567d98c419e0d8269d2cc497, type: 2}
   kitchenObjectLocationTransform: {fileID: 2005660729341514301}
   chairSittingLocation: {fileID: 4462355380644875039}
-  recipeListSO: {fileID: 11400000, guid: 76415fbc567d98c419e0d8269d2cc497, type: 2}
   dropOffLocation: {fileID: 3190354437454690422}
 --- !u!1 &4435406280931996896
 GameObject:

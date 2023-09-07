@@ -51,7 +51,7 @@ public class ResourceManager : MonoBehaviour
         
         resourceDictionary = new Dictionary<ResourceType, int>
         {
-            [ResourceType.Money] = 100,
+            [ResourceType.Money] = 10000,
             [ResourceType.Meat] = 10,
             [ResourceType.Bread] = 10,
             [ResourceType.Tomato] = 10,

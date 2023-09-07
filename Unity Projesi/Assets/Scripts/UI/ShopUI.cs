@@ -10,7 +10,10 @@ public class ShopUI : MonoBehaviour
 {
     [SerializeField] private Button openShopButton;
     [SerializeField] private Button closeShopButton;
+    [SerializeField] private Button changePanelButton;
     [SerializeField] private GameObject shopPanel;
+    [SerializeField] private GameObject buyIngredientsPanel;
+    [SerializeField] private GameObject upgradePanel;
     [SerializeField] private List<IngredientItemUI> ingredientItemList;
     [SerializeField] private TMP_Text moneyText;
 
@@ -18,6 +21,7 @@ public class ShopUI : MonoBehaviour
     {
         openShopButton.onClick.AddListener(OnOpenShopButtonClicked);
         closeShopButton.onClick.AddListener(OnCloseShopButtonClicked);
+        changePanelButton.onClick.AddListener(OnChangePanelButtonClicked);
         ResourceManager.Instance.OnMoneyChanged += ResourceManager_OnMoneyChanged;
     }
 
@@ -43,5 +47,11 @@ public class ShopUI : MonoBehaviour
     {
         shopPanel.SetActive(false);
         Time.timeScale = 1f;
+    }
+    
+    private void OnChangePanelButtonClicked()
+    {
+        buyIngredientsPanel.SetActive(!buyIngredientsPanel.activeInHierarchy);
+        upgradePanel.SetActive(!upgradePanel.activeInHierarchy);
     }
 }

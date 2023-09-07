@@ -38,6 +38,7 @@ public class Customer : MonoBehaviour
             transform.position = chairSittingLocation;
             navMeshAgent.enabled = false;
             targetTable.SetCustomer(this);
+            transform.eulerAngles = new Vector3(0, 90, 0);
         }
     }
     
