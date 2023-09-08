@@ -7,13 +7,15 @@ using UnityEngine.UI;
 public class UpgradePanelUI : MonoBehaviour
 {
     [SerializeField] private UpgradeItemUI upgradeItemStove;
+    [SerializeField] private UpgradeItemUI upgradeItemMovementSpeed;
     [SerializeField] private List<FryingRecipeSO> fryingRecipeSOList;
 
     private void Start()
     {
         upgradeItemStove.GetUpgradeButton().onClick.AddListener(OnUpgradeStoveButtonClicked);
+        upgradeItemMovementSpeed.GetUpgradeButton().onClick.AddListener(OnUpgradeMovementSpeedButtonClicked);
     }
-    
+
     private void OnUpgradeStoveButtonClicked()
     {
         if (ResourceManager.Instance.GetMoney() >= upgradeItemStove.GetUpgradePrice())
@@ -26,6 +28,26 @@ public class UpgradePanelUI : MonoBehaviour
                 Debug.Log($"Old Frying Timer: {fryingRecipeSO.fryingTimerMax}");
                 fryingRecipeSO.fryingTimerMax = fryingRecipeSO.fryingTimerMax * 90 / 100;
                 Debug.Log($"New Frying Timer: {fryingRecipeSO.fryingTimerMax}");
+            }
+        }
+    }
+    
+    private void OnUpgradeMovementSpeedButtonClicked()
+    {
+        if (ResourceManager.Instance.GetMoney() >= upgradeItemMovementSpeed.GetUpgradePrice())
+        {
+            ResourceManager.Instance.DecreaseMoney(upgradeItemMovementSpeed.GetUpgradePrice());
+            upgradeItemMovementSpeed.IncreaseUpgradeCount();
+
+            PlayerController[] playerControllerArray = FindObjectsByType<PlayerController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            foreach (PlayerController playerController in playerControllerArray)
+            {
+                Debug.Log($"Old MovementSpeed: {playerController.GetMovementSpeed()}");
+                float oldMovementSpeed = playerController.GetMovementSpeed();
+                oldMovementSpeed *= 1.1f;
+                playerController.SetMovementSpeed(oldMovementSpeed);
+                Debug.Log($"New MovementSpeed: {playerController.GetMovementSpeed()}");
             }
         }
     }

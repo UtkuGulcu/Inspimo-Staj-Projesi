@@ -30,6 +30,7 @@ public class StoveCounter : Counter, IHasProgress
     private BurningRecipeSO burningRecipeSO;
     private State state;
     private float timer;
+    private float timerMax;
 
     private void Update()
     {

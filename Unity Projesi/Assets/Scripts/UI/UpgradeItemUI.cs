@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UpgradeItemUI : MonoBehaviour
@@ -10,7 +11,7 @@ public class UpgradeItemUI : MonoBehaviour
     [SerializeField] private int[] upgradePrices;
     [SerializeField] private int[] upgradePercentages;
     [SerializeField] private TMP_Text upgradeButtonText;
-    [SerializeField] private TMP_Text upgradeDescriptionText;
+    [SerializeField] private TMP_Text upgradePercentageText;
 
     private int upgradeCount;
     
@@ -35,13 +36,6 @@ public class UpgradeItemUI : MonoBehaviour
         }
         
         upgradeButtonText.text = $"Upgrade {upgradePrices[upgradeCount]}$";
-        upgradeDescriptionText.text = $"Cooks food %{upgradePercentages[upgradeCount]} faster";
-
-        
-    }
-    
-    public int GetUpgradeCount()
-    {
-        return upgradeCount;
+        upgradePercentageText.text = $"%{upgradePercentages[upgradeCount]}";
     }
 }

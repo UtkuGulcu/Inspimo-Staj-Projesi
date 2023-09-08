@@ -32,7 +32,8 @@ public class ShopUI : MonoBehaviour
 
     private void OnOpenShopButtonClicked()
     {
-        shopPanel.SetActive(true);
+        //shopPanel.SetActive(true);
+        shopPanel.GetComponent<ShopPanelUIVisual>().Open();
         Time.timeScale = 0f;
 
         foreach (IngredientItemUI item in ingredientItemList)
@@ -45,7 +46,8 @@ public class ShopUI : MonoBehaviour
     
     private void OnCloseShopButtonClicked()
     {
-        shopPanel.SetActive(false);
+        //shopPanel.SetActive(false);
+        shopPanel.GetComponent<ShopPanelUIVisual>().Close();
         Time.timeScale = 1f;
     }
     

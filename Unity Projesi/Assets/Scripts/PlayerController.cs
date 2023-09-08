@@ -47,4 +47,14 @@ public class PlayerController : MonoBehaviour
     {
         return isWalking;
     }
+
+    public void SetMovementSpeed(float movementSpeed)
+    {
+        this.movementSpeed = movementSpeed;
+    }
+    
+    public float GetMovementSpeed()
+    {
+        return movementSpeed;
+    }
 }

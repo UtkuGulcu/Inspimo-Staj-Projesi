@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     {
         ControlButtonsUI.Instance.OnSwitchCharacterButtonDown += UIManager_OnSwitchCharacterButtonDown;
         activeCharacter = ActiveCharacter.Waiter;
+        Application.targetFrameRate = Screen.currentResolution.refreshRate;
     }
 
     private void OnDisable()
