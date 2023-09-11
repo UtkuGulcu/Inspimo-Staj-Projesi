@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -9,12 +10,14 @@ public class CustomerManager : MonoBehaviour
 {
     public static CustomerManager Instance { get; private set; }
 
-    [SerializeField] private List<GameObject> customerPrefabList;
+    public event EventHandler OnCustomerSpawned;
+
+    [SerializeField] private GameObject[] customerPrefabArray;
     [SerializeField] private Transform restaurantEntryPoint;
 
     private Table[] tables;
     private float timer;
-    private float timerMax = 30f;
+    private float timerMax = 40f;
 
     private void Awake()
     {
@@ -33,6 +36,17 @@ public class CustomerManager : MonoBehaviour
     {
         tables = FindObjectsByType<Table>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         TryToSpawnCustomer();
+        DifficultyManager.Instance.OnDifficultyChanged += DifficultyManager_OnDifficultyChanged;
+    }
+
+    private void OnDisable()
+    {
+        DifficultyManager.Instance.OnDifficultyChanged -= DifficultyManager_OnDifficultyChanged;
+    }
+
+    private void DifficultyManager_OnDifficultyChanged(object sender, DifficultyManager.OnDifficultyChangedEventArgs e)
+    {
+        timerMax = e.newDifficulty == DifficultyManager.Difficulty.Medium ? 35f : 30f;
     }
 
     private void Update()
@@ -65,17 +79,20 @@ public class CustomerManager : MonoBehaviour
             return;
         }
 
-        int randomCustomerIndex = Random.Range(0, customerPrefabList.Count);
+        int randomCustomerIndex = Random.Range(0, customerPrefabArray.Length);
         int randomTableIndex = Random.Range(0, availableTableList.Count);
         
-        Customer customer = Instantiate(customerPrefabList[randomCustomerIndex], restaurantEntryPoint.position, Quaternion.identity).GetComponent<Customer>();
+        Customer customer = Instantiate(customerPrefabArray[randomCustomerIndex], restaurantEntryPoint.position, Quaternion.identity).GetComponent<Customer>();
 
         Table targetTable = availableTableList[randomTableIndex];
         customer.SetTargetTable(targetTable);
+        OnCustomerSpawned?.Invoke(this, EventArgs.Empty);
     }
 
     public Vector3 GetRestaurantEntryPoint()
     {
         return restaurantEntryPoint.position;
     }
+    
+    
 }

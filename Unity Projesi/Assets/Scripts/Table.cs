@@ -29,11 +29,14 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         public RecipeSO recipeSO;
     }
 
+    public static event EventHandler OnAnyObjectPlacedHere;
+    public static event EventHandler<OnRecipeOrderedEventArgs> OnAnyRecipeOrdered;
+    public static event EventHandler<OnRecipeDoneEventArgs> OnAnyRecipeDone;
+    
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
     public event EventHandler<OnRecipeOrderedEventArgs> OnRecipeOrdered;
-    public event EventHandler<OnRecipeDoneEventArgs> OnRecipeDone;
-    
+
     [SerializeField] private SelectedObjectVisual SelectedObjectVisual;
     [SerializeField] private RecipeListSO recipeListSO;
     [SerializeField] private Transform kitchenObjectLocationTransform;
@@ -47,6 +50,17 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
     private State state;
     private float timer;
     private float timerMax;
+    private float difficultyMultiplier = 1f;
+
+    private void Start()
+    {
+        DifficultyManager.Instance.OnDifficultyChanged += DifficultyManager_OnDifficultyChanged;
+    }
+
+    private void DifficultyManager_OnDifficultyChanged(object sender, DifficultyManager.OnDifficultyChangedEventArgs e)
+    {
+        difficultyMultiplier = e.newDifficulty == DifficultyManager.Difficulty.Medium ? 0.9f : 0.8f;
+    }
 
     private void Update()
     {
@@ -103,10 +117,15 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
 
     private void HandleWaitingToOrderInteraction(Player player)
     {
-        OrderRandomRecipe();
+        orderedRecipe = OrderManager.Instance.GetRandomRecipe();
         ChangeState(State.WaitingOrder);
 
         OnRecipeOrdered?.Invoke(this, new OnRecipeOrderedEventArgs
+        {
+            recipeSO = orderedRecipe
+        });
+        
+        OnAnyRecipeOrdered?.Invoke(this, new OnRecipeOrderedEventArgs
         {
             recipeSO = orderedRecipe
         });
@@ -141,11 +160,11 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         switch (state)
         {
             case State.WaitingToOrder:
-                timerMax = 60f;
+                timerMax = 60f * difficultyMultiplier;
                 break;
             
             case State.WaitingOrder:
-                timerMax = 100f;
+                timerMax = 100f * difficultyMultiplier;
                 break;
             
             case State.Eating:
@@ -197,6 +216,11 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.kitchenObject = kitchenObject;
+        
+        if (kitchenObject != null)
+        {
+            OnAnyObjectPlacedHere?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public void ClearKitchenObject()
@@ -242,18 +266,12 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
 
     private void InvokeOnRecipeDone(RecipeSO recipeSO)
     {
-        OnRecipeDone?.Invoke(this, new OnRecipeDoneEventArgs
+        OnAnyRecipeDone?.Invoke(this, new OnRecipeDoneEventArgs
         {
             recipeSO = recipeSO
         });
     }
 
-    private void OrderRandomRecipe()
-    {
-        int randomIndex = Random.Range(0, recipeListSO.recipeSOList.Count);
-        orderedRecipe = recipeListSO.recipeSOList[randomIndex];
-    }
-    
     private bool IsValidPlate(List<KitchenObjectSO> ingredientsInPlateList)
     {
         if (ingredientsInPlateList.Count != orderedRecipe.kitchenObjectSOList.Count)

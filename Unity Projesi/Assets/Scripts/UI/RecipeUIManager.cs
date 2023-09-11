@@ -13,16 +13,11 @@ public class RecipeUIManager : MonoBehaviour
     private void Start()
     {
         recipeUISingleList = new List<RecipeUISingle>();
-        tableArray = FindObjectsByType<Table>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-
-        foreach (Table table in tableArray)
-        {
-            table.OnRecipeOrdered += Table_OnRecipeOrdered;
-            table.OnRecipeDone += Table_OnRecipeDone;
-        }
+        Table.OnAnyRecipeOrdered += Table_OnAnyRecipeOrdered;
+        Table.OnAnyRecipeDone += Table_OnAnyRecipeDone;
     }
 
-    private void Table_OnRecipeOrdered(object sender, Table.OnRecipeOrderedEventArgs e)
+    private void Table_OnAnyRecipeOrdered(object sender, Table.OnRecipeOrderedEventArgs e)
     {
         GameObject spawnedRecipe = Instantiate(recipeTemplate, transform);
         RecipeUISingle recipeUISingle = spawnedRecipe.GetComponent<RecipeUISingle>();
@@ -30,7 +25,7 @@ public class RecipeUIManager : MonoBehaviour
         recipeUISingleList.Add(recipeUISingle);
     }
     
-    private void Table_OnRecipeDone(object sender, Table.OnRecipeDoneEventArgs e)
+    private void Table_OnAnyRecipeDone(object sender, Table.OnRecipeDoneEventArgs e)
     {
         foreach (RecipeUISingle recipeUISingle in recipeUISingleList)
         {

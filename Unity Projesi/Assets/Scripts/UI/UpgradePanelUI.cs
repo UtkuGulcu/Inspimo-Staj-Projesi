@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ using UnityEngine.UI;
 
 public class UpgradePanelUI : MonoBehaviour
 {
+    public static event EventHandler OnUpgradeButtonClicked;
+
     [SerializeField] private UpgradeItemUI upgradeItemStove;
     [SerializeField] private UpgradeItemUI upgradeItemMovementSpeed;
     [SerializeField] private List<FryingRecipeSO> fryingRecipeSOList;
@@ -29,6 +32,8 @@ public class UpgradePanelUI : MonoBehaviour
                 fryingRecipeSO.fryingTimerMax = fryingRecipeSO.fryingTimerMax * 90 / 100;
                 Debug.Log($"New Frying Timer: {fryingRecipeSO.fryingTimerMax}");
             }
+            
+            OnUpgradeButtonClicked?.Invoke(this, EventArgs.Empty);
         }
     }
     
@@ -49,6 +54,8 @@ public class UpgradePanelUI : MonoBehaviour
                 playerController.SetMovementSpeed(oldMovementSpeed);
                 Debug.Log($"New MovementSpeed: {playerController.GetMovementSpeed()}");
             }
+            
+            OnUpgradeButtonClicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

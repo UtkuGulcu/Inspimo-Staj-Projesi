@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Counter : MonoBehaviour, IInteractable, IKitchenObjectParent
 {
+    public static event EventHandler OnAnyObjectPlacedHere;
+    
     [SerializeField] private SelectedObjectVisual SelectedObjectVisual;
     [SerializeField] private Transform kitchenObjectLocationTransform;
 
@@ -35,9 +37,14 @@ public class Counter : MonoBehaviour, IInteractable, IKitchenObjectParent
         return kitchenObject;
     }
 
-    public void SetKitchenObject(KitchenObject KitchenObject)
+    public void SetKitchenObject(KitchenObject kitchenObject)
     {
-        this.kitchenObject = KitchenObject;
+        this.kitchenObject = kitchenObject;
+
+        if (kitchenObject != null)
+        {
+            OnAnyObjectPlacedHere?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public void ClearKitchenObject()

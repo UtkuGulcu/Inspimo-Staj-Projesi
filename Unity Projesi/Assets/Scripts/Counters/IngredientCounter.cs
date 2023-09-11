@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class IngredientCounter : Counter
 {
+    public static event EventHandler OnAnyIngredientInteracted;
+    
     public event EventHandler OnPlayerPickedIngredient;
     
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
@@ -30,6 +32,7 @@ public class IngredientCounter : Counter
             kitchenObjectPlayer.DestroySelf();
             ResourceManager.Instance.IncreaseKitchenObjectAmount(kitchenObjectSO, 1);
             OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
+            OnAnyIngredientInteracted?.Invoke(this, EventArgs.Empty);
         }
         else if (kitchenObjectPlayer.TryGetComponent(out Plate plate))
         {
@@ -37,6 +40,7 @@ public class IngredientCounter : Counter
             
             ResourceManager.Instance.DecreaseKitchenObjectAmount(kitchenObjectSO, 1);
             OnPlayerPickedIngredient?.Invoke(this, EventArgs.Empty);
+            OnAnyIngredientInteracted?.Invoke(this, EventArgs.Empty);
         }
     }
 

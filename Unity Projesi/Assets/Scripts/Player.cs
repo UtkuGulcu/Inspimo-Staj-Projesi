@@ -5,20 +5,22 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent
 {
-    //public static Player Instance { get; private set; }
+    public static event EventHandler OnPickedSomething;
 
     [SerializeField] private Transform pickupPoint;
-
+    
     private KitchenObject kitchenObject;
     private PlayerController playerController;
     private PlayerInteraction playerInteraction;
     private PlayerVisual playerVisual;
+    private PlayerSound playerSound;
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
         playerVisual = GetComponent<PlayerVisual>();
         playerInteraction = GetComponent<PlayerInteraction>();
+        playerSound = GetComponent<PlayerSound>();
     }
 
     public Transform GetKitchenObjectLocationTransform()
@@ -34,6 +36,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.kitchenObject = kitchenObject;
+
+        if (kitchenObject != null)
+        {
+            OnPickedSomething?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public void ClearKitchenObject()
@@ -51,6 +58,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         playerController.enabled = true;
         playerVisual.enabled = true;
         playerInteraction.enabled = true;
+        playerSound.enabled = true;
         playerInteraction.SubscribeToInteractEvents();
     }
     
@@ -59,5 +67,6 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         playerController.enabled = false;
         playerVisual.enabled = false;
         playerInteraction.enabled = false;
+        playerSound.enabled = false;
     }
 }

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e50fde736232bfc478f0654fd791f5da, type: 3}
+  m_Name: Flat Audio Effects
+  m_EditorClassIdentifier: 
+  customerSpawn: {fileID: 7604998939772405428, guid: 1d16c00069d5d7744b186234073b7a68,
+    type: 3}
+  takeOrder: {fileID: 6584631067293274614, guid: f8ad6ed399862674887a587e9322f5fc,
+    type: 3}
+  payOrder: {fileID: 6983108007051851637, guid: ee020b2beb44397449c9fd51112aaa0f,
+    type: 3}
+  buttonClick:
+  - {fileID: 4085915700352863841, guid: fd76a542201df6142a5087cc67b5bfcd, type: 3}
+  - {fileID: 5689838972631959050, guid: 1e5899cc2374eb6489bab4df7c9d7a2d, type: 3}
+  - {fileID: 7214532818974105642, guid: fc2078b87ae92ed43a46313d71d8763d, type: 3}
+  doorOpen: {fileID: 5682721796864350738, guid: 429ecd5f3f2103d47baf456eee10b2d5,
+    type: 3}
+  doorClose: {fileID: 701125868151257497, guid: 6481cada5bfb4fe49a7c18be8bb34156,
+    type: 3}

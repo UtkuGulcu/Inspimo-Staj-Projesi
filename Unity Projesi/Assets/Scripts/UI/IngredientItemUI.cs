@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class IngredientItemUI : MonoBehaviour
 {
+    public static event EventHandler OnIngredientBought;
+    
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
     [SerializeField] private TMP_Text amountText;
     [SerializeField] private Button buyButton;
@@ -26,6 +28,8 @@ public class IngredientItemUI : MonoBehaviour
             resourceManager.DecreaseMoney(kitchenObjectSO.price);
             UpdateText();    
         }
+        
+        OnIngredientBought?.Invoke(this, EventArgs.Empty);
     }
 
     public void UpdateText()

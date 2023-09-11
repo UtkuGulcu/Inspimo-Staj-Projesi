@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CuttingCounter : Counter, IAlternateInteractable, IHasProgress
 {
+    public static event EventHandler OnAnyCut;
+    
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     
     [SerializeField] private List<CuttingRecipeSO> validCuttingRecipes;
@@ -22,6 +24,7 @@ public class CuttingCounter : Counter, IAlternateInteractable, IHasProgress
             {
                 interactedPlayer.GetKitchenObject().SetKitchenObjectParent(this);
                 cuttingRecipeSO = GetCuttingRecipeWithInput(kitchenObjectPlayer.GetKitchenObjectSO());
+                cuttingProgress = 0;
             }
         }
         else
@@ -45,6 +48,9 @@ public class CuttingCounter : Counter, IAlternateInteractable, IHasProgress
                 oldKitchenObjectPlayer.SetKitchenObjectParent(this);
                 cuttingRecipeSO = GetCuttingRecipeWithInput(oldKitchenObjectPlayer.GetKitchenObjectSO());
             }
+            
+            cuttingProgress = 0;
+            InvokeOnProgressChangedEvent(0f);
         }
     }
     
@@ -54,6 +60,7 @@ public class CuttingCounter : Counter, IAlternateInteractable, IHasProgress
         {
             cuttingProgress++;
             InvokeOnProgressChangedEvent((float) cuttingProgress / cuttingRecipeSO.cuttingProgressMax);
+            OnAnyCut?.Invoke(this, EventArgs.Empty);
 
             if (cuttingProgress == cuttingRecipeSO.cuttingProgressMax)
             {

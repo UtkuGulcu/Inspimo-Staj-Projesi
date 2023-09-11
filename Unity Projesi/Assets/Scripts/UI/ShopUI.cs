@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class ShopUI : MonoBehaviour
 {
+    public static event EventHandler OnAnyChangePanelButtonDown;
+    
     [SerializeField] private Button openShopButton;
     [SerializeField] private Button closeShopButton;
     [SerializeField] private Button changePanelButton;
@@ -32,7 +34,6 @@ public class ShopUI : MonoBehaviour
 
     private void OnOpenShopButtonClicked()
     {
-        //shopPanel.SetActive(true);
         shopPanel.GetComponent<ShopPanelUIVisual>().Open();
         Time.timeScale = 0f;
 
@@ -42,18 +43,20 @@ public class ShopUI : MonoBehaviour
         }
 
         moneyText.text = ResourceManager.Instance.GetMoney().ToString();
+        OnAnyChangePanelButtonDown?.Invoke(this, EventArgs.Empty);
     }
     
     private void OnCloseShopButtonClicked()
     {
-        //shopPanel.SetActive(false);
         shopPanel.GetComponent<ShopPanelUIVisual>().Close();
         Time.timeScale = 1f;
+        OnAnyChangePanelButtonDown?.Invoke(this, EventArgs.Empty);
     }
     
     private void OnChangePanelButtonClicked()
     {
         buyIngredientsPanel.SetActive(!buyIngredientsPanel.activeInHierarchy);
         upgradePanel.SetActive(!upgradePanel.activeInHierarchy);
+        OnAnyChangePanelButtonDown?.Invoke(this, EventArgs.Empty);
     }
 }
