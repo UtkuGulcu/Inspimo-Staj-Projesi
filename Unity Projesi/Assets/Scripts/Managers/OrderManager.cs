@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 
 public class OrderManager : MonoBehaviour
 {
-   
     public static OrderManager Instance { get; private set; }
 
     [SerializeField] private List<RecipeSO> easyDifficultyRecipeList;

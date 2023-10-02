@@ -11,4 +11,5 @@ public class FlatAudioEffectsSO : ScriptableObject
     public GameObject[] buttonClick;
     public GameObject doorOpen;
     public GameObject doorClose;
+    public GameObject failOrder;
 }

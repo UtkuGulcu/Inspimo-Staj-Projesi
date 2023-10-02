@@ -15,10 +15,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Player waiter;
 
     private ActiveCharacter activeCharacter;
-    
+
+    private void Awake()
+    {
+        SaveManager.Instance.Load();
+    }
+
     private void Start()
     {
         ControlButtonsUI.Instance.OnSwitchCharacterButtonDown += UIManager_OnSwitchCharacterButtonDown;
+
         activeCharacter = ActiveCharacter.Waiter;
         Application.targetFrameRate = Screen.currentResolution.refreshRate;
     }
@@ -26,6 +32,16 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         ControlButtonsUI.Instance.OnSwitchCharacterButtonDown -= UIManager_OnSwitchCharacterButtonDown;
+    }
+    
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus)
+        {
+            return;
+        }
+        
+        SaveManager.Instance.Save();
     }
 
     private void UIManager_OnSwitchCharacterButtonDown(object sender, EventArgs e)

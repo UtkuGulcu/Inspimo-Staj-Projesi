@@ -22,7 +22,7 @@ public class IngredientItemUI : MonoBehaviour
     {
         ResourceManager resourceManager = ResourceManager.Instance;
         
-        if (resourceManager.GetMoney() >= kitchenObjectSO.price)
+        if (resourceManager.GetResourceAmount(ResourceManager.ResourceType.Money) >= kitchenObjectSO.price)
         {
             resourceManager.IncreaseKitchenObjectAmount(kitchenObjectSO, 1);
             resourceManager.DecreaseMoney(kitchenObjectSO.price);

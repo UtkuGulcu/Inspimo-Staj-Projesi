@@ -34,7 +34,7 @@ public class ShopUI : MonoBehaviour
 
     private void OnOpenShopButtonClicked()
     {
-        shopPanel.GetComponent<ShopPanelUIVisual>().Open();
+        shopPanel.GetComponent<PanelUIVisual>().Open();
         Time.timeScale = 0f;
 
         foreach (IngredientItemUI item in ingredientItemList)
@@ -42,13 +42,13 @@ public class ShopUI : MonoBehaviour
             item.UpdateText();
         }
 
-        moneyText.text = ResourceManager.Instance.GetMoney().ToString();
+        moneyText.text = ResourceManager.Instance.GetResourceAmount(ResourceManager.ResourceType.Money).ToString();
         OnAnyChangePanelButtonDown?.Invoke(this, EventArgs.Empty);
     }
     
     private void OnCloseShopButtonClicked()
     {
-        shopPanel.GetComponent<ShopPanelUIVisual>().Close();
+        shopPanel.GetComponent<PanelUIVisual>().Close();
         Time.timeScale = 1f;
         OnAnyChangePanelButtonDown?.Invoke(this, EventArgs.Empty);
     }

@@ -15,13 +15,28 @@ public class UpgradePanelUI : MonoBehaviour
 
     private void Start()
     {
-        upgradeItemStove.GetUpgradeButton().onClick.AddListener(OnUpgradeStoveButtonClicked);
-        upgradeItemMovementSpeed.GetUpgradeButton().onClick.AddListener(OnUpgradeMovementSpeedButtonClicked);
+        if (upgradeItemStove.GetUpgradeCount() >= 3)
+        {
+            upgradeItemStove.DestroySelf();
+        }
+        else
+        {
+            upgradeItemStove.GetUpgradeButton().onClick.AddListener(OnUpgradeStoveButtonClicked);
+        }
+        
+        if (upgradeItemMovementSpeed.GetUpgradeCount() >= 3)
+        {
+            upgradeItemMovementSpeed.DestroySelf();
+        }
+        else
+        {
+            upgradeItemMovementSpeed.GetUpgradeButton().onClick.AddListener(OnUpgradeMovementSpeedButtonClicked);
+        }
     }
 
     private void OnUpgradeStoveButtonClicked()
     {
-        if (ResourceManager.Instance.GetMoney() >= upgradeItemStove.GetUpgradePrice())
+        if (ResourceManager.Instance.GetResourceAmount(ResourceManager.ResourceType.Money) >= upgradeItemStove.GetUpgradePrice())
         {
             ResourceManager.Instance.DecreaseMoney(upgradeItemStove.GetUpgradePrice());
             upgradeItemStove.IncreaseUpgradeCount();
@@ -39,7 +54,7 @@ public class UpgradePanelUI : MonoBehaviour
     
     private void OnUpgradeMovementSpeedButtonClicked()
     {
-        if (ResourceManager.Instance.GetMoney() >= upgradeItemMovementSpeed.GetUpgradePrice())
+        if (ResourceManager.Instance.GetResourceAmount(ResourceManager.ResourceType.Money) >= upgradeItemMovementSpeed.GetUpgradePrice())
         {
             ResourceManager.Instance.DecreaseMoney(upgradeItemMovementSpeed.GetUpgradePrice());
             upgradeItemMovementSpeed.IncreaseUpgradeCount();

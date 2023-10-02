@@ -32,7 +32,9 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
     public static event EventHandler OnAnyObjectPlacedHere;
     public static event EventHandler<OnRecipeOrderedEventArgs> OnAnyRecipeOrdered;
     public static event EventHandler<OnRecipeDoneEventArgs> OnAnyRecipeDone;
-    
+    public static event EventHandler OnAnyOrderPaid;
+    public static event EventHandler OnAnyOrderFailed;
+
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
     public event EventHandler<OnRecipeOrderedEventArgs> OnRecipeOrdered;
@@ -149,7 +151,6 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         
         playerKitchenObject.SetKitchenObjectParent(this);
         ChangeState(State.Eating);
-        
         InvokeOnRecipeDone(orderedRecipe);
     }
 
@@ -182,6 +183,7 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         ChangeState(State.Idle);
         isOccupied = false;
         InvokeOnRecipeDone(orderedRecipe);
+        OnAnyOrderFailed?.Invoke(this, EventArgs.Empty);
     }
 
     private void HandleEatingDone()
@@ -191,6 +193,7 @@ public class Table : MonoBehaviour, IInteractable, IKitchenObjectParent, IHasPro
         ChangeState(State.Idle);
         ResourceManager.Instance.IncreaseMoney(orderedRecipe.price);
         isOccupied = false;
+        OnAnyOrderPaid?.Invoke(this, EventArgs.Empty);
     }
     
     public void StartInteracting()

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class Customer : MonoBehaviour
 {
-    public static event EventHandler OnAnyOrderPaid;
+    //public static event EventHandler OnAnyOrderPaid;
 
     private CustomerVisual customerVisual;
     private NavMeshAgent navMeshAgent;
@@ -58,7 +58,7 @@ public class Customer : MonoBehaviour
         navMeshAgent.enabled = true;
         navMeshAgent.SetDestination(CustomerManager.Instance.GetRestaurantEntryPoint());
         customerVisual.StartMoving();
-        OnAnyOrderPaid?.Invoke(this, EventArgs.Empty);
+        //OnAnyOrderPaid?.Invoke(this, EventArgs.Empty);
     }
 
     public void DestroySelf()

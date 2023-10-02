@@ -24,7 +24,7 @@ public class DifficultyManager : MonoBehaviour
     private Difficulty difficulty;
     private float timer;
     private float timerMax = 120f;
-    
+
     private void Awake()
     {
         if (Instance == null)
@@ -70,7 +70,5 @@ public class DifficultyManager : MonoBehaviour
         {
             newDifficulty = difficulty
         });
-        
-        Debug.Log($"Difficulty is {difficulty}");
     }
 }

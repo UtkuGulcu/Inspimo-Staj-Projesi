@@ -93,6 +93,4 @@ public class CustomerManager : MonoBehaviour
     {
         return restaurantEntryPoint.position;
     }
-    
-    
 }

@@ -13,7 +13,7 @@ public class ResourceManager : MonoBehaviour
         [SerializeField] public ResourceType resourceType;
     }
     
-    private enum ResourceType
+    public enum ResourceType
     {
         Money,
         Meat,
@@ -51,7 +51,7 @@ public class ResourceManager : MonoBehaviour
         
         resourceDictionary = new Dictionary<ResourceType, int>
         {
-            [ResourceType.Money] = 100,
+            [ResourceType.Money] = 1000,
             [ResourceType.Meat] = 10,
             [ResourceType.Bread] = 10,
             [ResourceType.Tomato] = 10,
@@ -74,11 +74,6 @@ public class ResourceManager : MonoBehaviour
         newAmount -= subtractedAmount;
         resourceDictionary[ResourceType.Money] = newAmount;
         InvokeOnMoneyChangedEvent(newAmount);
-    }
-    
-    public int GetMoney()
-    {
-        return resourceDictionary[ResourceType.Money];
     }
 
     public void IncreaseKitchenObjectAmount(KitchenObjectSO kitchenObjectSO, int addedAmount)
@@ -134,6 +129,16 @@ public class ResourceManager : MonoBehaviour
 
         Debug.LogError("Resource couldn't be found");
         return 0;
+    }
+
+    public int GetResourceAmount(ResourceType resourceType)
+    {
+        return resourceDictionary[resourceType];
+    }
+    
+    public void SetResourceAmount(ResourceType resourceType, int newAmount)
+    {
+        resourceDictionary[resourceType] = newAmount;
     }
 
     private void InvokeOnKitchenObjectResourceChangedEvent()

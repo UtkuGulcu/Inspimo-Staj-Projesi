@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,7 +15,12 @@ public class UpgradeItemUI : MonoBehaviour
     [SerializeField] private TMP_Text upgradePercentageText;
 
     private int upgradeCount;
-    
+
+    private void Start()
+    {
+        SetText();
+    }
+
     public Button GetUpgradeButton()
     {
         return upgradeButton;
@@ -25,16 +31,36 @@ public class UpgradeItemUI : MonoBehaviour
         return upgradePrices[upgradeCount];
     }
 
+    public int GetUpgradeCount()
+    {
+        return upgradeCount;
+    }
+    
+    public void SetUpgradeCount(int newUpgradeCount)
+    {
+        upgradeCount = newUpgradeCount;
+    }
+
     public void IncreaseUpgradeCount()
     {
         upgradeCount++;
         
         if (upgradeCount == 3)
         {
-            Destroy(gameObject);
+            DestroySelf();
             return;
         }
         
+        SetText();
+    }
+
+    public void DestroySelf()
+    {
+        Destroy(gameObject);
+    }
+
+    public void SetText()
+    {
         upgradeButtonText.text = $"Upgrade {upgradePrices[upgradeCount]}$";
         upgradePercentageText.text = $"%{upgradePercentages[upgradeCount]}";
     }

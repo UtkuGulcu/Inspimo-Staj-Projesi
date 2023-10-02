@@ -26,3 +26,5 @@ MonoBehaviour:
     type: 3}
   doorClose: {fileID: 701125868151257497, guid: 6481cada5bfb4fe49a7c18be8bb34156,
     type: 3}
+  failOrder: {fileID: 2165020465102156925, guid: 212a03f438851de4cbf17fb1ca9df45b,
+    type: 3}

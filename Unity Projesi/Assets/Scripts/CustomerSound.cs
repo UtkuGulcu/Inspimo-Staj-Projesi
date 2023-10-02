@@ -28,7 +28,7 @@ public class CustomerSound : MonoBehaviour
         {
             footstepTimer = 0f;
             float volume = 0.6f;
-            SoundManager.Instance.PlayFootstepsSound(transform.position, volume);
+            SoundReferences.Instance.PlayFootstepsSound(transform.position, volume);
         }
         
     }

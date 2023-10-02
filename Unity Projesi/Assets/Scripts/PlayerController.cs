@@ -25,11 +25,13 @@ public class PlayerController : MonoBehaviour
     {
         horizontalInput = FixedJoystick.Instance.Horizontal;
         verticalInput = FixedJoystick.Instance.Vertical;
+
+        
         movementVector = new Vector3(horizontalInput, 0, verticalInput);
         movementVector.Normalize();
         isWalking = false;
         
-        if (verticalInput != 0 && horizontalInput != 0)
+        if (verticalInput != 0 || horizontalInput != 0)
         {
             toRotation = Quaternion.LookRotation(movementVector, Vector3.up);
             isWalking = true;
