@@ -5,4 +5,4 @@ This is a project that I developed in Unity during my internship in Inspimo Cons
 You can  inspect the project and source code from this repository.  
 
   
-If you want more details or the test the game you can visit this link: https://utkugulcu.itch.io/
+If you want more details or the test the game you can visit this link: https://utkugulcu.itch.io/internship-project
